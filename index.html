@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rockstar Games</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        rockstar: {
+                            black: '#000000',
+                            dark: '#0b0b0b',
+                            card: '#121212',
+                            border: '#242424',
+                            gold: '#fcaf17',
+                            goldHover: '#e59b0c',
+                            gray: '#a3a3a3'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0b0b0b;
+            color: #ffffff;
+            overflow-x: hidden;
+            selection-background-color: #fcaf17;
+            selection-color: #000000;
+        }
+        ::selection {
+            background: #fcaf17;
+            color: #000000;
+        }
+        /* Плавная прокрутка */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Скрытие скроллбара для горизонтальных лент */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Эффект увеличения обложки при наведении */
+        .game-card-img {
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .game-card:hover .game-card-img {
+            transform: scale(1.04);
+        }
+        /* Анимация появления */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-rockstar-dark text-white font-sans antialiased">
+
+    <!-- ШАПКА САЙТА (NAVIGATION BAR) -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-md border-b border-rockstar-border transition-all duration-300">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Левая часть: Бургер + Логотип + Меню -->
+            <div class="flex items-center gap-6 lg:gap-10">
+                <!-- Кнопка мобильного меню -->
+                <button id="mobile-menu-btn" aria-label="Меню" class="lg:hidden p-2 text-white hover:text-rockstar-gold transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+
+                <!-- Логотип Rockstar Games из интернета с резервом -->
+                <a href="#" class="flex items-center group focus:outline-none">
+                    <div class="w-10 h-10 bg-rockstar-gold rounded-lg flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-200 overflow-hidden p-1.5">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Rockstar_Games_Logo.svg/512px-Rockstar_Games_Logo.svg.png"
+                             alt="Rockstar Games"
+                             onerror="this.onerror=null; this.src='https://placehold.co/80x80/fcaf17/000000?text=R*';"
+                             class="w-full h-full object-contain">
+                    </div>
+                </a>
+
+                <!-- Навигационные ссылки (Desktop) -->
+                <nav class="hidden lg:flex items-center gap-8 text-sm font-bold tracking-wide">
+                    <div class="relative group">
+                        <button class="flex items-center gap-1.5 py-7 text-white hover:text-rockstar-gold transition border-b-2 border-transparent hover:border-rockstar-gold">
+                            <span>Игры</span>
+                            <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <!-- Выпадающее мега-меню игр -->
+                        <div class="hidden group-hover:block absolute top-full left-0 w-[640px] bg-rockstar-card border border-rockstar-border rounded-b-xl shadow-2xl p-6 animate-fade-in">
+                            <div class="flex justify-between items-center mb-4 pb-2 border-b border-rockstar-border">
+                                <span class="text-xs uppercase tracking-widest text-rockstar-gray">Избранные игры</span>
+                                <a href="#games-section" class="text-xs text-rockstar-gold hover:underline">Смотреть все &rarr;</a>
+                            </div>
+                            <div class="grid grid-cols-4 gap-4">
+                                <a href="#games-section" class="group/item block">
+                                    <div class="aspect-[3/4] rounded-lg overflow-hidden bg-zinc-800 mb-2 border border-transparent group-hover/item:border-rockstar-gold transition relative">
+                                        <img src="https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=400&q=80"
+                                             alt="Grand Theft Auto VI"
+                                             onerror="this.onerror=null; this.src='https://placehold.co/300x400/5c164e/ffffff?text=GTA+VI';"
+                                             class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-2">
+                                            <span class="font-black text-xs leading-tight tracking-tighter">GRAND THEFT AUTO VI</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-xs font-semibold truncate group-hover/item:text-rockstar-gold">GTA VI</p>
+                                </a>
+                                <a href="#games-section" class="group/item block">
+                                    <div class="aspect-[3/4] rounded-lg overflow-hidden bg-zinc-800 mb-2 border border-transparent group-hover/item:border-rockstar-gold transition relative">
+                                        <img src="https://images.unsplash.com/photo-1534430480872-3498386e7856?auto=format&fit=crop&w=400&q=80"
+                                             alt="Grand Theft Auto V"
+                                             onerror="this.onerror=null; this.src='https://placehold.co/300x400/064e3b/ffffff?text=GTA+V';"
+                                             class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-2">
+                                            <span class="font-black text-xs leading-tight tracking-tighter">GRAND THEFT AUTO V</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-xs font-semibold truncate group-hover/item:text-rockstar-gold">GTA V</p>
+                                </a>
+                                <a href="#games-section" class="group/item block">
+                                    <div class="aspect-[3/4] rounded-lg overflow-hidden bg-zinc-800 mb-2 border border-transparent group-hover/item:border-rockstar-gold transition relative">
+                                        <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=400&q=80"
+                                             alt="Red Dead Redemption 2"
+                                             onerror="this.onerror=null; this.src='https://placehold.co/300x400/7f1d1d/ffffff?text=RDR+2';"
+                                             class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-2">
+                                            <span class="font-black text-xs leading-tight tracking-tighter">RED DEAD REDEMPTION 2</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-xs font-semibold truncate group-hover/item:text-rockstar-gold">RDR 2</p>
+                                </a>
+                                <a href="#games-section" class="group/item block">
+                                    <div class="aspect-[3/4] rounded-lg overflow-hidden bg-zinc-800 mb-2 border border-transparent group-hover/item:border-rockstar-gold transition relative">
+                                        <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=400&q=80"
+                                             alt="GTA Online"
+                                             onerror="this.onerror=null; this.src='https://placehold.co/300x400/b45309/ffffff?text=GTA+Online';"
+                                             class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-2">
+                                            <span class="font-black text-xs leading-tight tracking-tighter">GTA ONLINE</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-xs font-semibold truncate group-hover/item:text-rockstar-gold">GTA Online</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="#newswire-section" class="py-7 text-white hover:text-rockstar-gold transition border-b-2 border-transparent hover:border-rockstar-gold">Newswire</a>
+                    <a href="#videos-section" class="py-7 text-white hover:text-rockstar-gold transition border-b-2 border-transparent hover:border-rockstar-gold">Видео</a>
+                    <a href="#launcher-section" class="py-7 text-white hover:text-rockstar-gold transition border-b-2 border-transparent hover:border-rockstar-gold">Загрузки</a>
+                    <a href="#store-modal-trigger" onclick="openNotification('Магазин Rockstar Store временно открыт в ознакомительном режиме.')" class="py-7 text-white hover:text-rockstar-gold transition border-b-2 border-transparent hover:border-rockstar-gold flex items-center gap-1">
+                        <span>Магазин</span>
+                        <svg class="w-3.5 h-3.5 text-rockstar-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                    <a href="#support" onclick="openNotification('Служба поддержки Rockstar Support: все серверы работают в штатном режиме.')" class="py-7 text-white hover:text-rockstar-gold transition border-b-2 border-transparent hover:border-rockstar-gold flex items-center gap-1">
+                        <span>Поддержка</span>
+                        <svg class="w-3.5 h-3.5 text-rockstar-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Правая часть: Кнопка Launcher + Поиск + Профиль -->
+            <div class="flex items-center gap-3 sm:gap-5">
+                <a href="#launcher-section" class="hidden sm:inline-flex items-center justify-center px-5 py-2.5 bg-rockstar-gold hover:bg-rockstar-goldHover text-black font-extrabold text-xs uppercase tracking-wider rounded-md transition transform active:scale-95">
+                    Скачать Launcher
+                </a>
+
+                <!-- Кнопка поиска -->
+                <button onclick="toggleSearch()" aria-label="Поиск" class="p-2.5 rounded-full hover:bg-zinc-800 text-white transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </button>
+
+                <!-- Кнопка профиля Social Club -->
+                <button onclick="openAuthModal()" aria-label="Аккаунт Rockstar" class="p-2 rounded-full bg-zinc-900 border border-rockstar-border hover:border-rockstar-gold text-white transition flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-full bg-zinc-800 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-rockstar-gray" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Выдвижная панель поиска -->
+        <div id="search-bar" class="hidden bg-rockstar-card border-b border-rockstar-border px-4 sm:px-8 py-4 animate-fade-in">
+            <div class="max-w-4xl mx-auto flex items-center gap-3">
+                <svg class="w-5 h-5 text-rockstar-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                <input type="text" id="search-input" onkeyup="handleSearch(this.value)" placeholder="Поиск по играм и новостям Rockstar Games..." class="w-full bg-transparent text-white placeholder-zinc-500 focus:outline-none text-base">
+                <button onclick="toggleSearch()" class="text-zinc-400 hover:text-white text-sm font-semibold">Закрыть</button>
+            </div>
+        </div>
+
+        <!-- Мобильное выпадающее меню -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-black border-b border-rockstar-border px-6 py-6 space-y-4 animate-fade-in">
+            <a href="#games-section" onclick="closeMobileMenu()" class="block text-lg font-bold hover:text-rockstar-gold">Игры</a>
+            <a href="#newswire-section" onclick="closeMobileMenu()" class="block text-lg font-bold hover:text-rockstar-gold">Newswire</a>
+            <a href="#videos-section" onclick="closeMobileMenu()" class="block text-lg font-bold hover:text-rockstar-gold">Видео</a>
+            <a href="#launcher-section" onclick="closeMobileMenu()" class="block text-lg font-bold hover:text-rockstar-gold">Загрузки</a>
+            <div class="pt-4 border-t border-rockstar-border">
+                <a href="#launcher-section" onclick="closeMobileMenu()" class="block w-full text-center py-3 bg-rockstar-gold text-black font-extrabold text-sm uppercase tracking-wider rounded-md">
+                    Скачать Launcher
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ГЛАВНЫЙ HERO-БЛОК (СЛАЙДЕР КАК НА ROCKSTARGAMES.COM) -->
+    <section class="pt-20 bg-black border-b border-rockstar-border">
+        <div class="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 min-h-[580px] lg:min-h-[680px]">
+            
+            <!-- Левая часть: Визуальный баннер (8 колонок на десктопе) -->
+            <div class="lg:col-span-8 relative overflow-hidden bg-zinc-950 flex items-center justify-center group">
+                <!-- Динамический фон текущего слайда -->
+                <div id="hero-visual" class="w-full h-[360px] sm:h-[480px] lg:h-full relative flex items-center justify-center transition-all duration-700 bg-zinc-900">
+                    <!-- Фоновое изображение из интернета -->
+                    <img id="hero-bg-img"
+                         src="https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1600&q=85"
+                         alt="Featured Game Banner"
+                         onerror="this.onerror=null; this.src='https://placehold.co/1600x900/1a0526/fcaf17?text=ROCKSTAR+GAMES';"
+                         class="absolute inset-0 w-full h-full object-cover opacity-70 transition-transform duration-1000 group-hover:scale-105">
+                    <div id="hero-gradient-overlay" class="absolute inset-0 bg-gradient-to-tr from-[#1a0526]/90 via-[#5c164e]/55 to-[#ff7b54]/45"></div>
+                    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.75)_100%)]"></div>
+                    
+                    <!-- Логотип и заголовок поверх баннера -->
+                    <div id="hero-artwork-content" class="relative z-10 text-center px-6 transform transition-transform duration-700 group-hover:scale-105">
+                        <span class="inline-block px-3 py-1 mb-4 text-xs font-black tracking-[0.25em] uppercase bg-black/60 border border-white/20 rounded-full text-rockstar-gold backdrop-blur-sm">
+                            VI • VICE CITY • LEONIDA
+                        </span>
+                        <h2 class="text-5xl sm:text-7xl md:text-8xl font-black tracking-tighter uppercase leading-none drop-shadow-[0_10px_25px_rgba(0,0,0,0.8)]">
+                            GRAND THEFT<br>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-amber-300 to-orange-400">AUTO VI</span>
+                        </h2>
+                    </div>
+
+                    <!-- Кнопка воспроизведения трейлера поверх арта -->
+                    <button id="hero-play-btn" onclick="openTrailerModal('Grand Theft Auto VI — Официальный трейлер', 'Добро пожаловать в штат Леонида и неоновые улицы Вайс-Сити. Самая масштабная и захватывающая эволюция серии Grand Theft Auto.')" class="absolute bottom-6 right-6 z-20 flex items-center gap-3 bg-black/80 hover:bg-rockstar-gold text-white hover:text-black border border-white/20 hover:border-rockstar-gold px-5 py-3 rounded-full font-bold text-sm transition-all shadow-xl backdrop-blur-md">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        <span>Смотреть трейлер</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Правая часть: Описание и переключатели слайдов (4 колонки на десктопе) -->
+            <div class="lg:col-span-4 bg-black p-8 sm:p-12 lg:p-14 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-rockstar-border">
+                <div class="space-y-6 my-auto">
+                    <div id="hero-tag" class="text-xs font-extrabold uppercase tracking-[0.2em] text-rockstar-gold">
+                        Grand Theft Auto VI
+                    </div>
+                    <h1 id="hero-title" class="text-3xl sm:text-4xl lg:text-[42px] font-black leading-[1.1] tracking-tight">
+                        Смотрите первый трейлер прямо сейчас
+                    </h1>
+                    <p id="hero-desc" class="text-rockstar-gray text-sm sm:text-base leading-relaxed">
+                        Grand Theft Auto VI переносит игроков в штат Леонида, где находятся залитые неоном улицы Вайс-Сити и его окрестности.
+                    </p>
+                    <div class="pt-2">
+                        <button id="hero-cta" onclick="openTrailerModal('Grand Theft Auto VI — Официальный трейлер', 'Добро пожаловать в штат Леонида и неоновые улицы Вайс-Сити.')" class="w-full sm:w-auto px-8 py-4 border-2 border-white hover:border-rockstar-gold hover:bg-rockstar-gold hover:text-black text-white font-extrabold text-sm uppercase tracking-wider rounded-md transition-all duration-200">
+                            Смотреть сейчас
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Индикаторы слайдов (фирменные полоски Rockstar) -->
+                <div class="pt-10 mt-8 border-t border-rockstar-border/60">
+                    <div class="flex items-center justify-between mb-3">
+                        <span id="slide-counter" class="text-xs font-bold text-rockstar-gray tracking-widest">01 / 04</span>
+                        <div class="flex gap-2">
+                            <button onclick="prevSlide()" aria-label="Предыдущий слайд" class="p-2 rounded-md bg-zinc-900 hover:bg-zinc-800 text-white transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                            </button>
+                            <button onclick="nextSlide()" aria-label="Следующий слайд" class="p-2 rounded-md bg-zinc-900 hover:bg-zinc-800 text-white transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-4 gap-2.5" id="hero-indicators">
+                        <button onclick="setSlide(0)" class="h-1.5 rounded-full bg-white transition-all"></button>
+                        <button onclick="setSlide(1)" class="h-1.5 rounded-full bg-zinc-700 hover:bg-zinc-500 transition-all"></button>
+                        <button onclick="setSlide(2)" class="h-1.5 rounded-full bg-zinc-700 hover:bg-zinc-500 transition-all"></button>
+                        <button onclick="setSlide(3)" class="h-1.5 rounded-full bg-zinc-700 hover:bg-zinc-500 transition-all"></button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- РАЗДЕЛ NEWSWIRE (ЛЕНТА НОВОСТЕЙ) -->
+    <section id="newswire-section" class="py-16 sm:py-24 max-w-[1600px] mx-auto px-4 sm:px-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+            <div>
+                <h2 class="text-3xl sm:text-4xl font-black tracking-tight">Newswire</h2>
+                <p class="text-rockstar-gray text-sm mt-1">Последние анонсы, обновления и события мира Rockstar Games</p>
+            </div>
+
+            <!-- Фильтры новостей -->
+            <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2 md:pb-0" id="news-filters">
+                <button onclick="filterNews('all', this)" class="filter-btn active px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-black transition whitespace-nowrap">
+                    Все новости
+                </button>
+                <button onclick="filterNews('GTA Online', this)" class="filter-btn px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-rockstar-card border border-rockstar-border text-zinc-300 hover:border-white transition whitespace-nowrap">
+                    GTA Online
+                </button>
+                <button onclick="filterNews('Red Dead Online', this)" class="filter-btn px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-rockstar-card border border-rockstar-border text-zinc-300 hover:border-white transition whitespace-nowrap">
+                    Red Dead Online
+                </button>
+                <button onclick="filterNews('Rockstar Games', this)" class="filter-btn px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-rockstar-card border border-rockstar-border text-zinc-300 hover:border-white transition whitespace-nowrap">
+                    Rockstar Games
+                </button>
+            </div>
+        </div>
+
+        <!-- Сетка карточек Newswire -->
+        <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+            <!-- Карточки рендерятся через JS для поддержки поиска и фильтрации -->
+        </div>
+
+        <!-- Кнопка "Показать больше" -->
+        <div class="mt-14 text-center">
+            <!-- 4 вертикальные обложки игр с изображениями из интернета -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+                
+                <!-- Карточка 1: GTA VI -->
+                <div onclick="openGameModal('Grand Theft Auto VI', 'PlayStation 5, Xbox Series X|S', 'Grand Theft Auto VI отправляется в штат Леонида, где находятся залитые неоном улицы Вайс-Сити и его окрестности. Это самая масштабная и захватывающая эволюция серии Grand Theft Auto за всю историю.', 'https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=900&q=85')" class="game-card cursor-pointer group">
+                    <div class="aspect-[3/4] rounded-xl overflow-hidden border border-rockstar-border group-hover:border-rockstar-gold transition-colors relative bg-zinc-900">
+                        <img src="https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=700&q=85"
+                             alt="Grand Theft Auto VI Cover"
+                             onerror="this.onerror=null; this.src='https://placehold.co/600x800/5c164e/ffffff?text=Grand+Theft+Auto+VI';"
+                             class="game-card-img absolute inset-0 w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-fuchsia-900/25 p-6 flex flex-col justify-between">
+                            <div class="flex justify-between items-start">
+                                <span class="px-2.5 py-1 bg-black/75 backdrop-blur-md rounded text-[10px] font-black tracking-widest uppercase text-rockstar-gold border border-white/10">Скоро</span>
+                            </div>
+                            <div>
+                                <div class="text-6xl font-black text-white/25 leading-none select-none mb-2">VI</div>
+                                <h3 class="text-2xl font-black uppercase tracking-tight leading-none drop-shadow">Grand Theft Auto VI</h3>
+                                <p class="text-xs text-pink-200 mt-2 font-semibold">PS5 • Xbox Series X|S</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Карточка 2: GTA V -->
+                <div onclick="openGameModal('Grand Theft Auto V', 'PS5, PS4, Xbox Series X|S, Xbox One, PC', 'Когда молодой уличный жулик, отставной грабитель банков и пугающий психопат оказываются втянутыми в разборки с самыми страшными представителями криминального мира, правительства США и индустрии развлечений, им приходится выполнить серию рискованных ограблений.', 'https://images.unsplash.com/photo-1534430480872-3498386e7856?auto=format&fit=crop&w=900&q=85')" class="game-card cursor-pointer group">
+                    <div class="aspect-[3/4] rounded-xl overflow-hidden border border-rockstar-border group-hover:border-rockstar-gold transition-colors relative bg-zinc-900">
+                        <img src="https://images.unsplash.com/photo-1534430480872-3498386e7856?auto=format&fit=crop&w=700&q=85"
+                             alt="Grand Theft Auto V Cover"
+                             onerror="this.onerror=null; this.src='https://placehold.co/600x800/064e3b/ffffff?text=Grand+Theft+Auto+V';"
+                             class="game-card-img absolute inset-0 w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-emerald-900/25 p-6 flex flex-col justify-between">
+                            <div class="flex justify-between items-start">
+                                <span class="px-2.5 py-1 bg-black/75 backdrop-blur-md rounded text-[10px] font-black tracking-widest uppercase text-emerald-400 border border-white/10">Доступно</span>
+                            </div>
+                            <div>
+                                <div class="text-6xl font-black text-white/25 leading-none select-none mb-2">V</div>
+                                <h3 class="text-2xl font-black uppercase tracking-tight leading-none drop-shadow">Grand Theft Auto V</h3>
+                                <p class="text-xs text-emerald-200 mt-2 font-semibold">PC • PS5 • Xbox Series X|S</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Карточка 3: GTA Online -->
+                <div onclick="openGameModal('Grand Theft Auto Online', 'PS5, PS4, Xbox Series X|S, Xbox One, PC', 'Погрузитесь в постоянно развивающийся динамичный мир GTA Online для 30 игроков, где вы можете пройти путь от уличного дельца до главы собственной криминальной империи.', 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=900&q=85')" class="game-card cursor-pointer group">
+                    <div class="aspect-[3/4] rounded-xl overflow-hidden border border-rockstar-border group-hover:border-rockstar-gold transition-colors relative bg-zinc-900">
+                        <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=700&q=85"
+                             alt="Grand Theft Auto Online Cover"
+                             onerror="this.onerror=null; this.src='https://placehold.co/600x800/b45309/ffffff?text=GTA+Online';"
+                             class="game-card-img absolute inset-0 w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-amber-900/25 p-6 flex flex-col justify-between">
+                            <div class="flex justify-between items-start">
+                                <span class="px-2.5 py-1 bg-black/75 backdrop-blur-md rounded text-[10px] font-black tracking-widest uppercase text-amber-300 border border-white/10">Онлайн</span>
+                            </div>
+                            <div>
+                                <div class="text-5xl font-black text-white/25 leading-none select-none mb-2">ONLINE</div>
+                                <h3 class="text-2xl font-black uppercase tracking-tight leading-none drop-shadow">Grand Theft Auto Online</h3>
+                                <p class="text-xs text-amber-200 mt-2 font-semibold">PC • PS5 • Xbox Series X|S</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Карточка 4: Red Dead Redemption 2 -->
+                <div onclick="openGameModal('Red Dead Redemption 2', 'PS4, Xbox One, PC', 'Америка, 1899 год. Эпоха Дикого Запада подходит к концу. После сорвавшегося ограбления банка Артур Морган и остальные подручные Датча ван дер Линде вынуждены пуститься в бега.', 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=900&q=85')" class="game-card cursor-pointer group">
+                    <div class="aspect-[3/4] rounded-xl overflow-hidden border border-rockstar-border group-hover:border-rockstar-gold transition-colors relative bg-zinc-900">
+                        <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=700&q=85"
+                             alt="Red Dead Redemption 2 Cover"
+                             onerror="this.onerror=null; this.src='https://placehold.co/600x800/7f1d1d/ffffff?text=Red+Dead+Redemption+2';"
+                             class="game-card-img absolute inset-0 w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-red-900/25 p-6 flex flex-col justify-between">
+                            <div class="flex justify-between items-start">
+                                <span class="px-2.5 py-1 bg-black/75 backdrop-blur-md rounded text-[10px] font-black tracking-widest uppercase text-red-300 border border-white/10">Хит</span>
+                            </div>
+                            <div>
+                                <div class="text-6xl font-black text-white/25 leading-none select-none mb-2">II</div>
+                                <h3 class="text-2xl font-black uppercase tracking-tight leading-none drop-shadow">Red Dead Redemption 2</h3>
+                                <p class="text-xs text-red-200 mt-2 font-semibold">PC • PS4 • Xbox One</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- БАННЕР ROCKSTAR GAMES LAUNCHER -->
+    <section id="launcher-section" class="py-16 sm:py-24 max-w-[1600px] mx-auto px-4 sm:px-8">
+        <div class="rounded-2xl overflow-hidden bg-gradient-to-r from-zinc-900 via-[#161616] to-zinc-900 border border-rockstar-border grid grid-cols-1 lg:grid-cols-12 items-center">
+            <div class="lg:col-span-7 p-8 sm:p-12 lg:p-16 space-y-6">
+                <div class="inline-flex items-center gap-3 px-3.5 py-1.5 rounded-full bg-black border border-rockstar-border">
+                    <span class="w-2.5 h-2.5 rounded-full bg-rockstar-gold"></span>
+                    <span class="text-xs font-bold uppercase tracking-wider text-zinc-300">Приложение для ПК</span>
+                </div>
+                <h2 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+                    Rockstar Games Launcher
+                </h2>
+                <p class="text-rockstar-gray text-base sm:text-lg max-w-2xl leading-relaxed">
+                    Все ваши игры Rockstar Games для ПК в одном удобном приложении. Облачные сохранения, автоматические обновления и мгновенный доступ к новостям студии.
+                </p>
+                <div class="pt-2 flex flex-wrap gap-4">
+                    <button onclick="openNotification('Загрузка Rockstar-Games-Launcher.exe (Windows 10/11) началась...')" class="px-8 py-4 bg-rockstar-gold hover:bg-rockstar-goldHover text-black font-extrabold text-sm uppercase tracking-wider rounded-md transition transform active:scale-95 flex items-center gap-2.5">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        <span>Скачать для Windows</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Визуальная карточка лаунчера справа -->
+            <div class="lg:col-span-5 p-8 lg:p-12 flex justify-center">
+                <div class="w-full max-w-md bg-black border border-rockstar-border rounded-xl p-6 shadow-2xl space-y-5">
+                    <div class="flex items-center justify-between border-b border-rockstar-border pb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-rockstar-gold rounded flex items-center justify-center p-1 overflow-hidden">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Rockstar_Games_Logo.svg/512px-Rockstar_Games_Logo.svg.png"
+                                     alt="R*"
+                                     onerror="this.onerror=null; this.src='https://placehold.co/64x64/fcaf17/000000?text=R*';"
+                                     class="w-full h-full object-contain">
+                            </div>
+                            <span class="font-bold text-sm">Библиотека игр</span>
+                        </div>
+                        <span class="text-xs text-emerald-400 font-semibold">● В сети</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-zinc-900/90 border border-rockstar-border">
+                            <div>
+                                <p class="font-bold text-sm">Grand Theft Auto V</p>
+                                <p class="text-xs text-rockstar-gray">Установлено • Версия 1.69</p>
+                            </div>
+                            <button onclick="openNotification('Запуск Grand Theft Auto V...')" class="px-4 py-1.5 bg-rockstar-gold text-black font-extrabold text-xs rounded uppercase">Играть</button>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-zinc-900/90 border border-rockstar-border">
+                            <div>
+                                <p class="font-bold text-sm">Red Dead Redemption 2</p>
+                                <p class="text-xs text-rockstar-gray">Установлено • Облако синхр.</p>
+                            </div>
+                            <button onclick="openNotification('Запуск Red Dead Redemption 2...')" class="px-4 py-1.5 bg-zinc-800 hover:bg-rockstar-gold hover:text-black text-white font-extrabold text-xs rounded uppercase transition">Играть</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ПОДВАЛ САЙТА (FOOTER) -->
+    <footer class="bg-black border-t border-rockstar-border pt-16 pb-12 text-sm text-rockstar-gray">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-8 space-y-12">
+            
+            <!-- Верхний ряд футера -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div class="flex flex-wrap gap-6 sm:gap-8 font-bold text-white">
+                    <a href="#contact" onclick="openNotification('Раздел контактов Rockstar Games')" class="hover:text-rockstar-gold transition">Контакты</a>
+                    <a href="#careers" onclick="openNotification('Вакансии в студиях Rockstar North, San Diego, Toronto и др.')" class="hover:text-rockstar-gold transition">Вакансии</a>
+                    <a href="#community" onclick="openNotification('Правила сообщества Rockstar Games')" class="hover:text-rockstar-gold transition">Правила сообщества</a>
+                    <a href="#subscribe" onclick="openAuthModal()" class="hover:text-rockstar-gold transition">Подписаться на рассылку</a>
+                </div>
+
+                <!-- Выбор языка -->
+                <div>
+                    <select aria-label="Выбор языка" onchange="openNotification('Язык интерфейса: ' + this.value)" class="bg-rockstar-card border border-rockstar-border text-white text-xs font-bold rounded-md px-4 py-2.5 focus:outline-none focus:border-rockstar-gold">
+                        <option value="Русский">🌐 Русский</option>
+                        <option value="English">🌐 English</option>
+                        <option value="Deutsch">🌐 Deutsch</option>
+                        <option value="Français">🌐 Français</option>
+                        <option value="Español">🌐 Español</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Средний ряд: Юридические ссылки и соцсети -->
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 pt-8 border-t border-rockstar-border/60 text-xs">
+                <div class="flex flex-wrap gap-5">
+                    <a href="#corporate" class="hover:text-white transition">Корпоративная информация</a>
+                    <a href="#privacy" class="hover:text-white transition">Конфиденциальность</a>
+                    <a href="#cookies" class="hover:text-white transition">Настройки файлов cookie</a>
+                    <a href="#legal" class="hover:text-white transition">Юридическая информация</a>
+                    <a href="#donotsell" class="hover:text-white transition">Не передавать мои персональные данные</a>
+                </div>
+
+                <!-- Иконки социальных сетей -->
+                <div class="flex items-center gap-4 text-white">
+                    <a href="#x" aria-label="X" class="p-2.5 rounded-full bg-rockstar-card hover:bg-rockstar-gold hover:text-black transition">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                    <a href="#instagram" aria-label="Instagram" class="p-2.5 rounded-full bg-rockstar-card hover:bg-rockstar-gold hover:text-black transition">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z"/></svg>
+                    </a>
+                    <a href="#youtube" aria-label="YouTube" class="p-2.5 rounded-full bg-rockstar-card hover:bg-rockstar-gold hover:text-black transition">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    </a>
+                    <a href="#twitch" aria-label="Twitch" class="p-2.5 rounded-full bg-rockstar-card hover:bg-rockstar-gold hover:text-black transition">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Нижний ряд: Города студий -->
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-6 text-xs text-zinc-500 font-semibold">
+                <div>Rockstar Games</div>
+                <div class="flex flex-wrap justify-center gap-4 text-zinc-400">
+                    <span>Нью-Йорк</span>
+                    <span>Лондон</span>
+                    <span>Париж</span>
+                    <span>Богота</span>
+                </div>
+                <div>MCMXCVIII</div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- МОДАЛЬНОЕ ОКНО ПРОСМОТРА НОВОСТИ / ТРЕЙЛЕРА / ИГРЫ -->
+    <div id="custom-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-rockstar-card border border-rockstar-border rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl animate-fade-in">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-rockstar-border bg-black">
+                <span id="modal-badge" class="text-xs font-extrabold uppercase tracking-widest text-rockstar-gold">Rockstar Games</span>
+                <button onclick="closeModal()" class="text-zinc-400 hover:text-white p-1">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div id="modal-body" class="p-6 sm:p-8 space-y-5">
+                <!-- Контент подставляется динамически -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ВСПЛЫВАЮЩЕЕ УВЕДОМЛЕНИЕ (TOAST вместо alert) -->
+    <div id="toast-box" class="hidden fixed bottom-6 right-6 z-50 max-w-sm bg-rockstar-card border-l-4 border-rockstar-gold text-white px-5 py-4 rounded-lg shadow-2xl flex items-center gap-3 animate-fade-in">
+        <div class="w-6 h-6 rounded-full bg-rockstar-gold text-black font-black flex items-center justify-center text-xs shrink-0">R★</div>
+        <p id="toast-text" class="text-xs sm:text-sm font-medium"></p>
+    </div>
+
+    <script>
+        // --- ДАННЫЕ ДЛЯ СЛАЙДЕРА HERO (С КАРТИНКАМИ ИЗ ИНТЕРНЕТА) ---
+        const heroSlides = [
+            {
+                tag: "Grand Theft Auto VI",
+                title: "Смотрите первый трейлер прямо сейчас",
+                desc: "Grand Theft Auto VI переносит игроков в штат Леонида, где находятся залитые неоном улицы Вайс-Сити и его окрестности.",
+                cta: "Смотреть сейчас",
+                image: "https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1600&q=85",
+                gradient: "from-[#1a0526]/90 via-[#5c164e]/55 to-[#ff7b54]/45",
+                artworkBadge: "VI • VICE CITY • LEONIDA",
+                artworkTitle: 'GRAND THEFT<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-amber-300 to-orange-400">AUTO VI</span>'
+            },
+            {
+                tag: "Grand Theft Auto Online",
+                title: "Bottom Dollar Bounties уже доступно",
+                desc: "Откройте собственное агентство по поимке преступников в Лос-Сантосе вместе с Мод Экклз и очистите улицы округа Блэйн.",
+                cta: "Подробнее",
+                image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1600&q=85",
+                gradient: "from-[#062419]/90 via-[#0f4c3a]/60 to-[#d97706]/45",
+                artworkBadge: "LOS SANTOS • BOUNTY HUNTING",
+                artworkTitle: 'GTA ONLINE<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-amber-400">BOUNTIES</span>'
+            },
+            {
+                tag: "Red Dead Redemption 2",
+                title: "История банды Ван дер Линде на ПК и консолях",
+                desc: "Более 175 наград «Игра года» и свыше 250 высших оценок от критиков. Исследуйте суровый и живой мир Америки 1899 года.",
+                cta: "Узнать больше",
+                image: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1600&q=85",
+                gradient: "from-[#2b0909]/90 via-[#7f1d1d]/60 to-[#1c1917]/55",
+                artworkBadge: "OUTLAWS FOR LIFE • 1899",
+                artworkTitle: 'RED DEAD<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-amber-500">REDEMPTION II</span>'
+            },
+            {
+                tag: "GTA+",
+                title: "Новые бонусы подписки GTA+ в этом месяце",
+                desc: "Получите бесплатный суперкар в автоклубе Вайнвуда, доступ к классическим играм Rockstar и бонусные GTA$ каждый месяц.",
+                cta: "Оформить подписку",
+                image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=85",
+                gradient: "from-[#18181b]/90 via-[#27272a]/65 to-[#b45309]/50",
+                artworkBadge: "MEMBERSHIP • VINEWOOD CLUB",
+                artworkTitle: 'GTA+<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-yellow-500">CLUB BENEFITS</span>'
+            }
+        ];
+
+        let currentSlide = 0;
+        let slideInterval;
+
+        function renderSlide(index) {
+            currentSlide = (index + heroSlides.length) % heroSlides.length;
+            const slide = heroSlides[currentSlide];
+
+            document.getElementById('hero-tag').textContent = slide.tag;
+            document.getElementById('hero-title').textContent = slide.title;
+            document.getElementById('hero-desc').textContent = slide.desc;
+            document.getElementById('hero-cta').textContent = slide.cta;
+            document.getElementById('slide-counter').textContent = `0${currentSlide + 1} / 0${heroSlides.length}`;
+
+            const bgImg = document.getElementById('hero-bg-img');
+            bgImg.src = slide.image;
+
+            const overlay = document.getElementById('hero-gradient-overlay');
+            overlay.className = `absolute inset-0 bg-gradient-to-tr ${slide.gradient}`;
+
+            document.getElementById('hero-artwork-content').innerHTML = `
+                <span class="inline-block px-3 py-1 mb-4 text-xs font-black tracking-[0.25em] uppercase bg-black/60 border border-white/20 rounded-full text-rockstar-gold backdrop-blur-sm">
+                    ${slide.artworkBadge}
+                </span>
+                <h2 class="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter uppercase leading-none drop-shadow-[0_10px_25px_rgba(0,0,0,0.8)]">
+                    ${slide.artworkTitle}
+                </h2>
+            `;
+
+            // Обновление полосок индикаторов
+// ... existing code ... -->
+        // --- ДАННЫЕ NEWSWIRE (С ИЗОБРАЖЕНИЯМИ ИЗ ИНТЕРНЕТА) ---
+        const newsData = [
+            {
+                id: 1,
+                category: "GTA Online",
+                date: "12 ноября 2026",
+                title: "Тройные награды за задания по контрабанде и редкий транспорт в автосалоне Симона",
+                summary: "Поднимите свой криминальный бизнес на новую высоту на этой неделе: получайте 3X GTA$ и RP за все задания по продаже авиагрузов.",
+                image: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=800&q=80",
+                gradient: "from-amber-600/40 via-orange-900/50 to-zinc-950"
+            },
+            {
+                id: 2,
+                category: "Rockstar Games",
+                date: "8 ноября 2026",
+                title: "Саундтрек Grand Theft Auto: Исполнители и радиостанции на виниле",
+                summary: "Коллекционное издание культовых композиций из мира Grand Theft Auto теперь доступно для предзаказа в Rockstar Store.",
+                image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80",
+                gradient: "from-purple-700/40 via-indigo-950/50 to-black"
+            },
+            {
+                id: 3,
+                category: "Red Dead Online",
+                date: "4 ноября 2026",
+                title: "Бонусы для натуралистов и коллекционеров на фронтире в этом месяце",
+                summary: "Исследуйте дикую природу пяти штатов, сдавайте образцы Гарриет Дэвенпорт и получайте удвоенные выплаты и редкие костюмы.",
+                image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80",
+                gradient: "from-red-700/40 via-stone-900/50 to-black"
+            },
+            {
+                id: 4,
+                category: "GTA Online",
+                date: "29 октября 2026",
+                title: "Новые дрифт-гонки в доках Лос-Сантоса и тюнинг в автоклубе ЛС",
+                summary: "Испытайте мастерство управляемого заноса на обновленных трассах и разблокируйте эксклюзивные раскраски для спорткаров.",
+                image: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80",
+                gradient: "from-cyan-600/40 via-blue-950/50 to-black"
+            },
+            {
+                id: 5,
+                category: "Rockstar Games",
+                date: "21 октября 2026",
+                title: "Обновление Rockstar Games Launcher: улучшенная производительность и облачные сохранения",
+                summary: "Мы выпустили новый патч для ПК-лаунчера, ускоряющий загрузку библиотек и синхронизацию прогресса.",
+                image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80",
+                gradient: "from-yellow-600/40 via-zinc-900/50 to-black"
+            },
+            {
+                id: 6,
+                category: "Red Dead Online",
+                date: "15 октября 2026",
+                title: "Режим «К оружию»: защитите поселения Блэкуотер и Валентайн",
+                summary: "Объединитесь с союзниками, чтобы отразить волны налетчиков и заработать золотые слитки.",
+                image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80",
+                gradient: "from-rose-800/40 via-neutral-900/50 to-black"
+            }
+        ];
+
+        let activeFilter = 'all';
+        let showAllNews = false;
+
+        function renderNews(searchQuery = '') {
+            const grid = document.getElementById('news-grid');
+            let filtered = newsData.filter(item => {
+                const matchesCat = activeFilter === 'all' || item.category === activeFilter;
+                const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                      item.summary.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesCat && matchesSearch;
+            });
+
+            const visibleItems = showAllNews ? filtered : filtered.slice(0, 3);
+
+            if (visibleItems.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-rockstar-gray">По вашему запросу новостей не найдено.</div>`;
+                return;
+            }
+
+            grid.innerHTML = visibleItems.map(item => `
+                <article onclick="openArticleModal(${item.id})" class="group cursor-pointer bg-rockstar-card border border-rockstar-border hover:border-zinc-600 rounded-xl overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1">
+                    <div class="aspect-[16/10] bg-zinc-900 relative overflow-hidden">
+                        <img src="${item.image}"
+                             alt="${item.title}"
+                             onerror="this.onerror=null; this.src='https://placehold.co/800x500/121212/fcaf17?text=${encodeURIComponent(item.category)}';"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t ${item.gradient} p-5 flex flex-col justify-between">
+                            <span class="self-start px-3 py-1 rounded bg-black/75 backdrop-blur-md text-[11px] font-extrabold uppercase tracking-wider text-rockstar-gold border border-white/10">
+                                ${item.category}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-6 sm:p-7 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center gap-3 text-xs font-bold text-rockstar-gray mb-2.5">
+                                <span class="text-white">${item.category}</span>
+                                <span>•</span>
+                                <span>${item.date}</span>
+                            </div>
+                            <h3 class="text-xl font-extrabold leading-snug group-hover:text-rockstar-gold transition-colors">
+                                ${item.title}
+                            </h3>
+                        </div>
+                        <p class="text-sm text-rockstar-gray line-clamp-2">
+                            ${item.summary}
+                        </p>
+                    </div>
+                </article>
+            `).join('');
+
+            const loadBtn = document.getElementById('load-more-news');
+            loadBtn.textContent = showAllNews ? 'Свернуть новости' : 'Показать еще новости';
+            loadBtn.style.display = filtered.length <= 3 ? 'none' : 'inline-block';
+        }
+
+        function filterNews(category, btn) {
+            activeFilter = category;
+            document.querySelectorAll('.filter-btn').forEach(b => {
+                b.className = 'filter-btn px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-rockstar-card border border-rockstar-border text-zinc-300 hover:border-white transition whitespace-nowrap';
+            });
+            btn.className = 'filter-btn active px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-black transition whitespace-nowrap';
+            renderNews(document.getElementById('search-input').value);
+        }
+
+        function toggleMoreNews() {
+            showAllNews = !showAllNews;
+            renderNews(document.getElementById('search-input').value);
+        }
+
+        // --- ПОИСК И НАВИГАЦИЯ ---
+        function toggleSearch() {
+            const bar = document.getElementById('search-bar');
+            bar.classList.toggle('hidden');
+            if (!bar.classList.contains('hidden')) {
+                document.getElementById('search-input').focus();
+            }
+        }
+
+        function handleSearch(val) {
+            showAllNews = true;
+            renderNews(val);
+        }
+
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        function closeMobileMenu() {
+            document.getElementById('mobile-menu').classList.add('hidden');
+        }
+
+        // --- МОДАЛЬНЫЕ ОКНА И УВЕДОМЛЕНИЯ ---
+        function openArticleModal(id) {
+            const article = newsData.find(n => n.id === id);
+            if (!article) return;
+            document.getElementById('modal-badge').textContent = `${article.category} • ${article.date}`;
+            document.getElementById('modal-body').innerHTML = `
+                <div class="h-52 rounded-xl overflow-hidden relative bg-zinc-900">
+                    <img src="${article.image}"
+                         alt="${article.title}"
+                         onerror="this.onerror=null; this.src='https://placehold.co/800x450/121212/fcaf17?text=${encodeURIComponent(article.category)}';"
+                         class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-5">
+                        <span class="text-xl font-black tracking-tight text-rockstar-gold">${article.category}</span>
+                    </div>
+                </div>
+                <h3 class="text-2xl font-black leading-tight">${article.title}</h3>
+                <p class="text-rockstar-gray leading-relaxed">${article.summary}</p>
+                <p class="text-rockstar-gray text-sm leading-relaxed">
+                    Подробности доступны в игре и через официальный аккаунт Rockstar Games Social Club. Следите за лентой Newswire, чтобы не пропустить еженедельные бонусы и эксклюзивные награды.
+                </p>
+                <div class="pt-2">
+                    <button onclick="closeModal()" class="px-6 py-3 bg-rockstar-gold text-black font-extrabold text-xs uppercase tracking-wider rounded-md">Закрыть</button>
+                </div>
+            `;
+            document.getElementById('custom-modal').classList.remove('hidden');
+        }
+
+        function openTrailerModal(title, description) {
+            document.getElementById('modal-badge').textContent = 'Видео • Официальный трейлер';
+            document.getElementById('modal-body').innerHTML = `
+                <div class="aspect-video rounded-xl bg-black border border-rockstar-border relative flex flex-col items-center justify-center p-6 text-center overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-purple-900/40 via-black to-amber-600/30"></div>
+                    <div class="relative z-10 space-y-3">
+                        <div class="w-16 h-16 mx-auto rounded-full bg-rockstar-gold text-black flex items-center justify-center shadow-lg">
+                            <svg class="w-8 h-8 fill-current ml-1" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        </div>
+                        <p class="font-black text-lg uppercase tracking-wider">Предпросмотр трейлера (4K 60FPS)</p>
+                        <p class="text-xs text-rockstar-gray">Возрастной рейтинг: 18+ (PEGI 18 / ESRB M)</p>
+                    </div>
+                </div>
+                <h3 class="text-2xl font-black">${title}</h3>
+        function openGameModal(title, platforms, desc, imageUrl) {
+            document.getElementById('modal-badge').textContent = 'Каталог игр Rockstar Games';
+            document.getElementById('modal-body').innerHTML = `
+                ${imageUrl ? `
+                <div class="h-48 rounded-xl overflow-hidden relative bg-zinc-900">
+                    <img src="${imageUrl}" alt="${title}" onerror="this.onerror=null; this.src='https://placehold.co/800x400/121212/fcaf17?text=${encodeURIComponent(title)}';" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-rockstar-card via-transparent to-transparent"></div>
+                </div>` : ''}
+                <h3 class="text-3xl font-black">${title}</h3>
+                <div class="inline-block px-3 py-1 rounded bg-zinc-900 border border-rockstar-border text-xs font-bold text-rockstar-gold">
+                    Платформы: ${platforms}
+                </div>
+                <p class="text-rockstar-gray leading-relaxed">${desc}</p>
+                <div class="flex flex-wrap gap-3 pt-3">
+                    <button onclick="closeModal(); openNotification('Переход на страницу заказа ' + '${title}');" class="px-6 py-3 bg-rockstar-gold hover:bg-rockstar-goldHover text-black font-extrabold text-xs uppercase tracking-wider rounded-md transition">
+                        Выбрать издание
+                    </button>
+                    <button onclick="closeModal()" class="px-6 py-3 border border-zinc-700 hover:border-white text-white font-bold text-xs uppercase tracking-wider rounded-md transition">
+                        Закрыть
+                    </button>
+                </div>
+            `;
+            document.getElementById('custom-modal').classList.remove('hidden');
+        }
+
+        function openAuthModal() {
+            document.getElementById('modal-badge').textContent = 'Rockstar Games Social Club';
+            document.getElementById('modal-body').innerHTML = `
+                <h3 class="text-2xl font-black">Вход в аккаунт Rockstar Games</h3>
+                <p class="text-sm text-rockstar-gray">Войдите, чтобы синхронизировать прогресс, управлять бандами и получать бонусы в играх.</p>
+                <form onsubmit="event.preventDefault(); closeModal(); openNotification('Вы успешно вошли в аккаунт Rockstar Games!');" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-rockstar-gray mb-1.5">Электронная почта</label>
+                        <input type="email" required placeholder="player@rockstargames.com" class="w-full px-4 py-3 rounded-md bg-black border border-rockstar-border text-white focus:outline-none focus:border-rockstar-gold">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-rockstar-gray mb-1.5">Пароль</label>
+                        <input type="password" required placeholder="••••••••" class="w-full px-4 py-3 rounded-md bg-black border border-rockstar-border text-white focus:outline-none focus:border-rockstar-gold">
+                    </div>
+                    <button type="submit" class="w-full py-3.5 bg-rockstar-gold hover:bg-rockstar-goldHover text-black font-extrabold text-sm uppercase tracking-wider rounded-md transition">
+                        Войти
+                    </button>
+                </form>
+            `;
+            document.getElementById('custom-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+
+        // Закрытие модального окна по клику на фон
+        document.getElementById('custom-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'custom-modal') closeModal();
+        });
+
+        let toastTimeout;
+        function openNotification(message) {
+            const box = document.getElementById('toast-box');
+            document.getElementById('toast-text').textContent = message;
+            box.classList.remove('hidden');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                box.classList.add('hidden');
+            }, 3500);
+        }
+
+        // Инициализация при загрузке
+        window.addEventListener('DOMContentLoaded', () => {
+            renderSlide(0);
+            resetSlideTimer();
+            renderNews();
+        });
+    </script>
+</body>
+</html>
